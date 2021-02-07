@@ -1,18 +1,17 @@
 <template>
-  <div>
-    <img :src="logo" alt="logo">
-    <Test />
+  <div class="container">
+    <RegistrationForm />
   </div>
 </template>
 
 <script>
-import Test from "components/Test";
+import RegistrationForm from "components/RegistrationForm";
 
 import logo from 'img/favicon.png';
 
 export default {
   components: {
-    Test,
+    RegistrationForm,
   },
 
   data() {
