@@ -1,0 +1,148 @@
+@use './m-colors'
+@use './m-fonts'
+
+.registration-form
+  padding: 40px 30px
+  box-sizing: border-box
+  background: #FFFFFF
+  box-shadow: 0px 12px 24px rgba(44, 39, 56, 0.02), 0px 32px 64px rgba(44, 39, 56, 0.04)
+  border-radius: 24px
+  &_heading
+    display: block
+    padding: 0
+    @extend %font-heading
+    margin: 0 0 8px 0
+  &_sub-heading
+    display: block
+    padding: 0
+    @extend %font-heading-sub
+    margin: 0 0 58px 0
+  &_label
+    display: block
+    padding: 0
+    margin: 0 0 8px 0
+  &_title
+    display: block
+    padding: 0
+    @extend %font-main
+    margin: 0 0 7px 0
+  &_input
+    display: block
+    width: 100%
+    height: 52px
+    padding: 16px
+    border: 1px solid m-colors.$input-border
+    border-radius: 6px
+    box-sizing: border-box
+    box-shadow: 0px 4px 8px rgba(44, 39, 56, 0.04)
+    @extend %font-input
+    margin: 0 0 8px 0
+    &:focus
+      padding: 15px 
+      border: 2px solid m-colors.$input-focus-border
+      color: m-colors.$input-focus-text
+    &__filled
+      color: m-colors.$input-focus-text
+  &_error
+    display: block
+    padding: 0
+    @extend %font-error
+    opacity: 0
+    margin: 0
+  &_checkbox-label
+    display: flex
+    align-items: center
+    margin: 36px 0 38px 0
+  &_checkbox
+    opacity: 0
+    position: absolute
+    &:checked + .pseudo-checkbox
+      border: 2px solid m-colors.$checkbox-checked-border
+      &::after
+        content: url("~img/check.svg")
+    &:focus + .pseudo-checkbox
+      border: 2px solid m-colors.$checkbox-checked-border
+  &_submit-button
+    display: flex
+    justify-content: center
+    align-items: center
+    width: 100%
+    height: 56px
+    padding: 18px 121px
+    border: 2px solid transparent
+    box-sizing: border-box
+    box-shadow: 0px 2px 4px rgba(44, 39, 56, 0.08), 0px 4px 8px rgba(44, 39, 56, 0.08)
+    border-radius: 6px
+    background: m-colors.$button-background
+    @extend %font-button
+    &:not(&__disabled):hover
+      box-shadow: 0px 12px 24px rgba(44, 39, 56, 0.08), 0px 24px 48px rgba(44, 39, 56, 0.16)
+    &:not(&__disabled):active
+      border-color:  m-colors.$button-active-border
+      box-shadow: 0px 2px 4px rgba(5, 3, 8, 0), 0px 4px 8px rgba(44, 39, 56, 0.08)
+  &_submit-button__disabled
+    background: m-colors.$button-disabled-background
+    color: m-colors.$button-disabled-text
+
+.link
+  @extend %font-link
+
+.pseudo-checkbox
+  content: ""
+  display: block
+  width: 28px
+  height: 28px
+  border: 1px solid m-colors.$checkbox-border
+  box-sizing: border-box
+  box-shadow: 0px 4px 8px rgba(44, 39, 56, 0.04)
+  border-radius: 4px
+  background: m-colors.$checkbox-background
+  margin: 0 8px 0 0
+
+.pseudo-select
+  display: block
+  width: 100%
+  height: 52px
+  padding: 16px
+  border: 1px solid m-colors.$dropdown-border
+  box-sizing: border-box
+  box-shadow: 0px 4px 8px rgba(44, 39, 56, 0.04)
+  border-radius: 6px
+  background: m-colors.$dropdown-background
+  @extend %font-dropdown
+  text-align: left
+  margin: 0
+  position: relative
+  &::after
+    content: url("~img/chevron-bottom.svg")
+    position: absolute
+    top: 11px
+    right: 11px
+  &__filled
+    color: m-colors.$dropdown-active-text
+  &__focus
+    color: m-colors.$dropdown-active-text
+    border: 2px solid m-colors.$dropdown-active-border
+    &::after
+      top: 10px
+      right: 10px
+  &_list
+    display: block
+    border: 1px solid m-colors.$dropdown-menu-border
+    box-sizing: border-box
+    box-shadow: 0px 4px 8px rgba(44, 39, 56, 0.04), 0px 20px 20px rgba(44, 39, 56, 0.04)
+    border-radius: 6px
+    margin: 4px 0 0 0
+  &_item
+    display: block
+    width: 100%
+    height: 44px
+    padding: 12px 15px
+    border: none
+    box-sizing: border-box
+    @extend %font-dropdown-item
+    text-align: left
+    background: m-colors.$dropdown-menu-backround
+    &:hover,
+    &:focus
+      background: m-colors.$dropdon-menu-item-hover
