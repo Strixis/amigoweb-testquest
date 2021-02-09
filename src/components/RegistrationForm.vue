@@ -10,10 +10,11 @@
         class="registration-form_input"
         :class="{'registration-form_input__filled': formValues.name !== ''}"
         placeholder="Введите Ваше имя"
-        v-model="formValues.name"
+        v-model.trim="formValues.name"
+        @change="validateName"
       >
       <span class="registration-form_error"
-        :class="{ '__visible': !isValid,  }"
+        :class="{ '__visible': !isValid.formValues.name,  }"
       >
         Введено не корректное значение
       </span>
@@ -25,9 +26,10 @@
         :class="{'registration-form_input_filled': formValues.email !== ''}"
         placeholder="Введите ваш email"
         v-model="formValues.email"
+        @change="validateEmail"
       >
       <span class="registration-form_error"
-        :class="{ '__visible': !isValid }"
+        :class="{ '__visible': !isValid.formValues.email }"
       >
         Введено не корректное значение
       </span>
@@ -39,9 +41,10 @@
         :class="{'registration-form_input__filled': formValues.phone !== ''}"
         placeholder="Введите номер телефона"
         v-model="formValues.phone"
+        @change="validatePhone"
       >
       <span class="registration-form_error"
-        :class="{ '__visible': !isValid }"
+        :class="{ '__visible': !isValid.formValues.phone }"
       >
         Введено не корректное значение
       </span>
@@ -79,15 +82,30 @@
           Испанский
         </button>
       </div>
+      <span class="registration-form_error"
+        :class="{ '__visible': !isValid.formValues.choosenLanguage }"
+      >
+        Введено не корректное значение
+      </span>
     </div>
     <label class="registration-form_checkbox-label">
-      <input type="checkbox" class="registration-form_checkbox" v-model="formValues.agreement">
+      <input
+        type="checkbox"
+        class="registration-form_checkbox"
+        v-model="formValues.agreement"
+        @change="validateAgreement"
+      >
       <div class="pseudo-checkbox"></div>
       <span>Принимаю <a href="#" class="link">условия</a> использования</span>
+      <span class="registration-form_error"
+        :class="{ '__visible': !isValid.formValues.agreement }"
+      >
+        Введено не корректное значение
+      </span>
     </label>
     <button type="submit"
       class="registration-form_submit-button"
-      :class="{ 'registration-form_submit-button__disabled': !isValid }"
+      :class="{ 'registration-form_submit-button__disabled': !isValid.total }"
       @click="sendData($event)"
     >
       Зарегистрироваться
@@ -99,8 +117,6 @@
 export default {
   data() {
     return {
-      isValid: true,
-      testValue: 1,
       isOpen: false,
 
       formValues: {
@@ -110,21 +126,74 @@ export default {
         choosenLanguage: '',
         agreement: false,
       },
+      isValid: {
+        formValues: {
+          name: false,
+          email: false,
+          phone: false,
+          choosenLanguage: false,
+          agreement: false,
+        },
+        total: false,
+      }
     };
   },
   methods: {
     changeLanguage(language, event) {
       this.formValues.choosenLanguage = language;
       this.isOpen = !this.isOpen;
+      this.validateLanguage();
       event.preventDefault();
     },
     sendData(event) {
-      if (this.isValid) {
-        console.log({...this.formValues});
+      if (this.isValid.total) {
+        const sendValue = {...this.formValues};
+        sendValue.phone = sendValue.phone.replace(/\D/g, "");
+        console.log(sendValue);
         event.preventDefault();
       } else {
         event.preventDefault()
       };
+    },
+    validateTotal() {
+      this.isValid.total = Object.values(this.isValid.formValues).every(
+        (element) => element === true
+      ) ?
+        true :
+        false;
+    },
+    validateName() {
+      const nameRule = /^[a-z -]+$/ig;
+      
+      this.isValid.formValues.name = this.formValues.name.match(nameRule) ? true : false;
+      this.validateTotal();
+    },
+    validateEmail() {
+     const mailRule = /(\.\.)|(\.@)|(@\.)|(^\.)|(\.$)|(@{2,})/;
+     const mail = this.formValues.email;
+
+     this.isValid.formValues.email = mail.match(mailRule) || mail.length >= 78 ? false : true;
+     this.validateTotal();
+    },
+    validatePhone() {
+      const phoneRule = /^[\d\(\)\+-]+$/g;
+      const phone = this.formValues.phone;
+
+      this.isValid.formValues.phone = phone.match(phoneRule) && phone.replace(/\D/g, "")
+        .length === 11 ?
+        true :
+        false;
+      this.validateTotal();
+    },
+    validateLanguage() {
+      this.isValid.formValues.choosenLanguage = this.formValues.choosenLanguage !== "" ?
+        true :
+        false;
+      this.validateTotal();
+    },
+    validateAgreement() {
+      this.isValid.formValues.agreement = this.formValues.agreement;
+      this.validateTotal();
     },
   },
 }
