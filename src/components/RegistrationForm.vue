@@ -4,49 +4,21 @@
     <p class="registration-form_sub-heading">
       Уже есть аккаунт? <a href="#" class="link">Войти</a>
     </p>
-    <label class="registration-form_label">
-      <span class="registration-form_title">Имя</span>
+    <label v-for="(field, index) of fields"
+      :key="index"
+     class="registration-form_label">
+      <span class="registration-form_title">{{field.text}}</span>
       <input type="text"
         class="registration-form_input"
-        :class="{'registration-form_input__filled': formValues.name !== ''}"
-        placeholder="Введите Ваше имя"
-        v-model.trim="formValues.name"
+        :class="{'registration-form_input__filled': formValues[field.name] !== ''}"
+        :placeholder="field.placeholder"
+        v-model.trim="formValues[field.name]"
         @change="validate()"
       >
       <span class="registration-form_error"
-        :class="{ '__visible': !isValid.formValues.name,  }"
+        :class="{ '__visible': !isValid.formValues[field.name] }"
       >
-        Введено не корректное значение
-      </span>
-    </label>
-    <label class="registration-form_label">
-      <span class="registration-form_title">Еmail</span>
-      <input type="text"
-        class="registration-form_input"
-        :class="{'registration-form_input__filled': formValues.email !== ''}"
-        placeholder="Введите ваш email"
-        v-model="formValues.email"
-        @change="validate()"
-      >
-      <span class="registration-form_error"
-        :class="{ '__visible': !isValid.formValues.email }"
-      >
-        Введено не корректное значение
-      </span>
-    </label>
-    <label class="registration-form_label">
-      <span class="registration-form_title">Номер телефона</span>
-      <input type="text"
-        class="registration-form_input"
-        :class="{'registration-form_input__filled': formValues.phone !== ''}"
-        placeholder="Введите номер телефона"
-        v-model="formValues.phone"
-        @change="validate()"
-      >
-      <span class="registration-form_error"
-        :class="{ '__visible': !isValid.formValues.phone }"
-      >
-        Введено не корректное значение
+        {{ field.errorMessage }}
       </span>
     </label>
     <div class="registration-form_label">
@@ -55,35 +27,22 @@
         class="pseudo-select"
         :class="{
           'pseudo-select__focus': isOpen,
-          'pseudo-select__filled': formValues.choosenLanguage !== ''
+          'pseudo-select__filled': formValues.language !== ''
         }"
       >
-        {{ formValues.choosenLanguage === "" ? 'Язык' : formValues.choosenLanguage }}
+        {{ formValues.language === "" ? 'Язык' : choosenLanguage }}
       </button>
       <div v-show="isOpen" class="pseudo-select_list">
         <button class="pseudo-select_item"
-          @click="changeLanguage('Русский', $event)"
+          v-for="(language, index) of languages"
+          :key="index"
+          @click="changeLanguage(language, $event)"
         >
-          Русский
-        </button>
-        <button class="pseudo-select_item"
-          @click="changeLanguage('Английский', $event)"
-        >
-          Английский
-        </button>
-        <button class="pseudo-select_item"
-          @click="changeLanguage('Китайский', $event)"
-        >
-          Китайский
-        </button>
-        <button class="pseudo-select_item"
-          @click="changeLanguage('Испанский', $event)"
-        >
-          Испанский
+          {{ language.text }}
         </button>
       </div>
       <span class="registration-form_error"
-        :class="{ '__visible': !isValid.formValues.choosenLanguage }"
+        :class="{ '__visible': !isValid.formValues.language }"
       >
         Введено не корректное значение
       </span>
@@ -118,12 +77,39 @@ export default {
   data() {
     return {
       isOpen: false,
+      fields: [
+        {
+          name: 'name',
+          text: 'Имя',
+          placeholder: 'Введите Ваше имя',
+          errorMessage: 'Введено не корректное значение',
+        },
+        {
+          name: 'email',
+          text: 'Email',
+          placeholder: 'Введите ваш email',
+          errorMessage: 'Введено не корректное значение',
+        },
+        {
+          name: 'phone',
+          text: 'Номер телефона',
+          placeholder: 'Введите номер телефона',
+          errorMessage: 'Введено не корректное значение',
+        },
+      ],
+      languages: [
+        {text: 'Русский', value: 'russian'},
+        {text: 'Английский', value: 'english'},
+        {text: 'Китайский', value: 'chinese'},
+        {text: 'Испанский', value: 'spain'},
+      ],
+      choosenLanguage: '',
 
       formValues: {
         name: '',
         email: '',
         phone: '',
-        choosenLanguage: '',
+        language: '',
         agreement: false,
       },
       isValid: {
@@ -131,7 +117,7 @@ export default {
           name: true,
           email: true,
           phone: true,
-          choosenLanguage: true,
+          language: true,
           agreement: true,
         },
         total: false,
@@ -140,9 +126,10 @@ export default {
   },
   methods: {
     changeLanguage(language, event) {
-      this.formValues.choosenLanguage = language;
+      this.formValues.language = language.value;
+      this.choosenLanguage = language.text;
       this.isOpen = !this.isOpen;
-      this.validate('language');
+      this.validate();
       event.preventDefault();
     },
     sendData(event) {
@@ -172,7 +159,7 @@ export default {
         phone.match(phoneRule) && phone.replace(/\D/g, "").length === 11
       ) ? true : false;
 
-      this.isValid.formValues.choosenLanguage = this.formValues.choosenLanguage !== "" ?
+      this.isValid.formValues.language = this.formValues.language !== "" ?
         true :
         false;
         
