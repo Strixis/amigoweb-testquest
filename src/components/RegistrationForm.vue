@@ -11,7 +11,7 @@
         :class="{'registration-form_input__filled': formValues.name !== ''}"
         placeholder="Введите Ваше имя"
         v-model.trim="formValues.name"
-        @change="validateName"
+        @change="validate()"
       >
       <span class="registration-form_error"
         :class="{ '__visible': !isValid.formValues.name,  }"
@@ -23,10 +23,10 @@
       <span class="registration-form_title">Еmail</span>
       <input type="text"
         class="registration-form_input"
-        :class="{'registration-form_input_filled': formValues.email !== ''}"
+        :class="{'registration-form_input__filled': formValues.email !== ''}"
         placeholder="Введите ваш email"
         v-model="formValues.email"
-        @change="validateEmail"
+        @change="validate()"
       >
       <span class="registration-form_error"
         :class="{ '__visible': !isValid.formValues.email }"
@@ -41,7 +41,7 @@
         :class="{'registration-form_input__filled': formValues.phone !== ''}"
         placeholder="Введите номер телефона"
         v-model="formValues.phone"
-        @change="validatePhone"
+        @change="validate()"
       >
       <span class="registration-form_error"
         :class="{ '__visible': !isValid.formValues.phone }"
@@ -93,7 +93,7 @@
         type="checkbox"
         class="registration-form_checkbox"
         v-model="formValues.agreement"
-        @change="validateAgreement"
+        @change="validate()"
       >
       <div class="pseudo-checkbox"></div>
       <span>Принимаю <a href="#" class="link">условия</a> использования</span>
@@ -128,11 +128,11 @@ export default {
       },
       isValid: {
         formValues: {
-          name: false,
-          email: false,
-          phone: false,
-          choosenLanguage: false,
-          agreement: false,
+          name: true,
+          email: true,
+          phone: true,
+          choosenLanguage: true,
+          agreement: true,
         },
         total: false,
       }
@@ -142,58 +142,45 @@ export default {
     changeLanguage(language, event) {
       this.formValues.choosenLanguage = language;
       this.isOpen = !this.isOpen;
-      this.validateLanguage();
+      this.validate('language');
       event.preventDefault();
     },
     sendData(event) {
       if (this.isValid.total) {
         const sendValue = {...this.formValues};
         sendValue.phone = sendValue.phone.replace(/\D/g, "");
-        console.log(sendValue);
+        alert(JSON.stringify(sendValue));
         event.preventDefault();
       } else {
-        event.preventDefault()
+        event.preventDefault();
       };
     },
-    validateTotal() {
-      this.isValid.total = Object.values(this.isValid.formValues).every(
-        (element) => element === true
-      ) ?
-        true :
-        false;
-    },
-    validateName() {
-      const nameRule = /^[a-z -]+$/ig;
-      
+    validate() {
+      const nameRule = /^[\p{L} -]+$/igu;
       this.isValid.formValues.name = this.formValues.name.match(nameRule) ? true : false;
-      this.validateTotal();
-    },
-    validateEmail() {
-     const mailRule = /(\.\.)|(\.@)|(@\.)|(^\.)|(\.$)|(@{2,})/;
-     const mail = this.formValues.email;
 
-     this.isValid.formValues.email = mail.match(mailRule) || mail.length >= 78 ? false : true;
-     this.validateTotal();
-    },
-    validatePhone() {
-      const phoneRule = /^[\d\(\)\+-]+$/g;
+      const falseMailRule = /(^\.)|(\.\.)|(\.@)/;
+      const trueMailRule = /^[\w-\.]+@[a-z]+\.[a-z]{2,}$/ig;
+      const mail = this.formValues.email;
+      this.isValid.formValues.email = (
+        !mail.match(falseMailRule) && mail.match(trueMailRule) && mail.length < 78
+      ) ? true : false;
+
+      const phoneRule = /^[\d()+-]+$/g;
       const phone = this.formValues.phone;
+      this.isValid.formValues.phone = (
+        phone.match(phoneRule) && phone.replace(/\D/g, "").length === 11
+      ) ? true : false;
 
-      this.isValid.formValues.phone = phone.match(phoneRule) && phone.replace(/\D/g, "")
-        .length === 11 ?
-        true :
-        false;
-      this.validateTotal();
-    },
-    validateLanguage() {
       this.isValid.formValues.choosenLanguage = this.formValues.choosenLanguage !== "" ?
         true :
         false;
-      this.validateTotal();
-    },
-    validateAgreement() {
+        
       this.isValid.formValues.agreement = this.formValues.agreement;
-      this.validateTotal();
+
+      this.isValid.total = Object.values(this.isValid.formValues).every(
+        (element) => element === true
+      ) ? true : false;
     },
   },
 }
