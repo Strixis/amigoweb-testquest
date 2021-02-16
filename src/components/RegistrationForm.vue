@@ -7,7 +7,7 @@
     <label v-for="(field, index) of fields"
       :key="index"
      class="registration-form_label">
-      <span class="registration-form_title">{{field.text}}</span>
+      <span class="registration-form_title">{{ field.text }}</span>
       <input type="text"
         class="registration-form_input"
         :class="{'registration-form_input__filled': formValues[field.name] !== ''}"
@@ -23,7 +23,12 @@
     </label>
     <div class="registration-form_label">
       <span class="registration-form_title">Язык</span>
-      <button @click.prevent="isOpen = !isOpen"
+      <input id="pseudo-select_checkbox"
+        class="pseudo-select_checkbox"
+        type="checkbox"
+        @click.prevent="isOpen = !isOpen"
+      >
+      <label for="pseudo-select_checkbox"
         class="pseudo-select"
         :class="{
           'pseudo-select__focus': isOpen,
@@ -31,15 +36,22 @@
         }"
       >
         {{ formValues.language === "" ? 'Язык' : choosenLanguage }}
-      </button>
+      </label>
       <div v-show="isOpen" class="pseudo-select_list">
-        <button class="pseudo-select_item"
-          v-for="(language, index) of languages"
+        <div v-for="(language, index) of languages"
           :key="index"
-          @click="changeLanguage(language, $event)"
         >
-          {{ language.text }}
-        </button>
+          <input :id="`pseudo-select_item-checkbox[${index}]`"
+            class="pseudo-select_item-checkbox"
+            type="checkbox"
+            @click="changeLanguage(language, $event)"
+          >
+          <label :for="`pseudo-select_item-checkbox[${index}]`"
+            class="pseudo-select_item"
+          >
+            {{ language.text }}
+          </label>
+        </div>
       </div>
       <span class="registration-form_error"
         :class="{ '__visible': !isValid.formValues.language }"

@@ -124,10 +124,21 @@
     color: m-colors.$dropdown-active-text
   &__focus
     color: m-colors.$dropdown-active-text
+    padding: 15px
     border: 2px solid m-colors.$dropdown-active-border
     &::after
       top: 10px
       right: 10px
+  &_checkbox
+    opacity: 0
+    position: absolute
+    &:focus + .pseudo-select
+      color: m-colors.$dropdown-active-text
+      padding: 15px
+      border: 2px solid m-colors.$dropdown-active-border
+      &::after
+        top: 10px
+        right: 10px
   &_list
     display: block
     width: 100%
@@ -149,6 +160,10 @@
     @extend %font-dropdown-item
     text-align: left
     background: none
-    &:hover,
-    &:focus
+    &:hover
       background: m-colors.$dropdon-menu-item-hover
+    &-checkbox
+      opacity: 0
+      position: absolute
+      &:focus + .pseudo-select_item
+        background: m-colors.$dropdon-menu-item-hover
