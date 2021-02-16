@@ -67,7 +67,7 @@
         @change="validate()"
       >
       <div class="pseudo-checkbox"></div>
-      <span>Принимаю <a href="#" class="link">условия</a> использования</span>
+      <span class="registration-form_checkbox-title">Принимаю <a href="#" class="link">условия</a> использования</span>
       <span class="registration-form_error"
         :class="{ '__visible': !isValid.formValues.agreement }"
       >

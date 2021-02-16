@@ -4,7 +4,7 @@ import App from './App';
 
 import 'styles/normalize.css';
 
-Vue.config.devtools = false;
+Vue.config.devtools = true;
 
 new Vue({
   render: h => h(App)
