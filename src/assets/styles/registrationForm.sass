@@ -47,8 +47,10 @@
       color: m-colors.$input-focus-text
   &_input::-webkit-input-placeholder
     color: m-colors.$input-text
+    opacity: 1
   &_input::-moz-placeholder
     color: m-colors.$input-text
+    opacity: 1
   &_error
     display: block
     padding: 0
@@ -77,7 +79,7 @@
     height: 56px
     padding: 18px 121px
     border: 2px solid transparent
-    outline: none
+    outline: none !important
     box-sizing: border-box
     box-shadow: 0px 2px 4px rgba(44, 39, 56, 0.08), 0px 4px 8px rgba(44, 39, 56, 0.08)
     border-radius: 6px
