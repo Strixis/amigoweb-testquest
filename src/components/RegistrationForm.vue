@@ -148,7 +148,7 @@ export default {
       if (this.isValid.total) {
         const sendValue = {...this.formValues};
         sendValue.phone = sendValue.phone.replace(/\D/g, "");
-        alert(JSON.stringify(sendValue));
+        alert(JSON.stringify(sendValue, null, ' '));
         event.preventDefault();
       } else {
         event.preventDefault();
