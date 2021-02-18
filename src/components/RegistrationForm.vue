@@ -67,7 +67,7 @@
         @change="validate()"
       >
       <div class="pseudo-checkbox"></div>
-      <span>Принимаю <a href="#" class="link">условия</a> использования</span>
+      <span class="registration-form_checkbox-title">Принимаю <a href="#" class="link">условия</a> использования</span>
       <span class="registration-form_error"
         :class="{ '__visible': !isValid.formValues.agreement }"
       >
@@ -148,7 +148,7 @@ export default {
       if (this.isValid.total) {
         const sendValue = {...this.formValues};
         sendValue.phone = sendValue.phone.replace(/\D/g, "");
-        alert(JSON.stringify(sendValue));
+        alert(JSON.stringify(sendValue, null, ' '));
         event.preventDefault();
       } else {
         event.preventDefault();
